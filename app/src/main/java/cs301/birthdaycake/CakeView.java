@@ -74,7 +74,7 @@ public class CakeView extends SurfaceView {
     public void drawCandle(Canvas canvas, float left, float bottom) {
         if (!reference.hasCandles) { return; }
 
-        canvas.drawRect(left, bottom - candleHeight, left + candleWidth, bottom, candlePaint);
+        canvas.drawRect(left, bottom - candleHeight - 50, left + candleWidth, bottom, candlePaint);
 
         if (reference.isLit == true){
             //draw the outer flame
