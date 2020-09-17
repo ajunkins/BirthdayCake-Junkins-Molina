@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         CakeController controller = new CakeController(cakeView);
 
 
-        Button blowoutButton = findViewById(R.id.button2);
+        Button blowoutButton = findViewById(R.id.buttonExtinguish);
         blowoutButton.setOnClickListener(controller);
 
         Switch candles = findViewById(R.id.switch2);
