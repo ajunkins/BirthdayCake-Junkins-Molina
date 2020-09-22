@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 
@@ -19,6 +18,7 @@ public class CakeView extends SurfaceView {
     Paint outerFlamePaint = new Paint();
     Paint innerFlamePaint = new Paint();
     Paint wickPaint = new Paint();
+    Paint textPaint = new Paint();
     Paint balloonPaint = new Paint();
 
     /* These constants define the dimensions of the cake.  While defining constants for things
@@ -63,11 +63,34 @@ public class CakeView extends SurfaceView {
         innerFlamePaint.setStyle(Paint.Style.FILL);
         wickPaint.setColor(Color.BLACK);
         wickPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(Color.RED);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(30f);
         balloonPaint.setColor(Color.BLUE);
 
         setBackgroundColor(Color.WHITE);  //better than black default
 
         this.reference = new CakeModel();
+
+        //initialize x and y touch values
+        touchedx = 0f;
+        touchedy = 0f;
+    }
+
+    /**
+     * writes the coordinates of where the screen was touched in the lower-right hand corner
+     */
+    public void setCoords(float xvalue, float yvalue){
+        Log.d("touch", "CakeView was touched");
+        touchedx = xvalue;
+        touchedy = yvalue;
+        this.invalidate();
+    }
+
+    public void drawCoords(Canvas canvas){
+        if (touchedx != 0f && touchedy != 0f){
+            canvas.drawText("Touched Coordinates: " + touchedx + ", " + touchedy, 1285.33f, 684.23f, textPaint);
+        }
     }
 
     /**
@@ -157,8 +180,11 @@ public class CakeView extends SurfaceView {
 
         //draw the balloon
         drawBalloon(canvas, reference.x, reference.y);
-    }//onDraw
 
+        //draw coordinate text
+        drawCoords(canvas);
+
+    }//onDraw
 
     public CakeModel getReference(){
         return this.reference;
