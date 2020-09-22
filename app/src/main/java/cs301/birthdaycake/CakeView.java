@@ -5,7 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.util.Log;
 
 public class CakeView extends SurfaceView {
 
@@ -18,6 +20,7 @@ public class CakeView extends SurfaceView {
     Paint outerFlamePaint = new Paint();
     Paint innerFlamePaint = new Paint();
     Paint wickPaint = new Paint();
+    Paint textPaint = new Paint();
 
     /* These constants define the dimensions of the cake.  While defining constants for things
         like this is good practice, we could be calculating these better by detecting
@@ -36,6 +39,9 @@ public class CakeView extends SurfaceView {
     public static final float outerFlameRadius = 30.0f;
     public static final float innerFlameRadius = 15.0f;
 
+    //touched coordinates
+    public float touchedx;
+    public float touchedy;
 
 
     /**
@@ -61,10 +67,32 @@ public class CakeView extends SurfaceView {
         innerFlamePaint.setStyle(Paint.Style.FILL);
         wickPaint.setColor(Color.BLACK);
         wickPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(Color.RED);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(30f);
 
         setBackgroundColor(Color.WHITE);  //better than black default
-
         this.reference = new CakeModel();
+
+        //initialize x and y touch values
+        touchedx = 0f;
+        touchedy = 0f;
+    }
+
+    /**
+     * writes the coordinates of where the screen was touched in the lower-right hand corner
+     */
+    public void setCoords(float xvalue, float yvalue){
+        Log.d("touch", "CakeView was touched");
+        touchedx = xvalue;
+        touchedy = yvalue;
+        this.invalidate();
+    }
+
+    public void drawCoords(Canvas canvas){
+        if (touchedx != 0f && touchedy != 0f){
+            canvas.drawText("Touched Coordinates: " + touchedx + ", " + touchedy, 1285.33f, 684.23f, textPaint);
+        }
     }
 
     /**
@@ -74,12 +102,12 @@ public class CakeView extends SurfaceView {
     public void drawCandle(Canvas canvas, float left, float bottom) {
         if (!reference.hasCandles) { return; }
 
-        canvas.drawRect(left, bottom - candleHeight - 50, left + candleWidth, bottom, candlePaint);
+        canvas.drawRect(left, bottom - candleHeight + 50, left + candleWidth, bottom, candlePaint);
 
         if (reference.isLit == true){
             //draw the outer flame
             float flameCenterX = left + candleWidth/2;
-            float flameCenterY = bottom - wickHeight - candleHeight - outerFlameRadius/3;
+            float flameCenterY = bottom - wickHeight - candleHeight + 50 - outerFlameRadius/3;
             canvas.drawCircle(flameCenterX, flameCenterY, outerFlameRadius, outerFlamePaint);
 
             //draw the inner flame
@@ -89,7 +117,7 @@ public class CakeView extends SurfaceView {
 
         //draw the wick
         float wickLeft = left + candleWidth/2 - wickWidth/2;
-        float wickTop = bottom - wickHeight - candleHeight;
+        float wickTop = bottom - wickHeight - candleHeight + 50;
         canvas.drawRect(wickLeft, wickTop, wickLeft + wickWidth, wickTop + wickHeight, wickPaint);
 
     }
@@ -134,6 +162,9 @@ public class CakeView extends SurfaceView {
         for (int i = 1; i <= numCandles; i++){
             drawCandle(canvas, cakeLeft + i*cakeWidth/(numCandles+1) - candleWidth/2, cakeTop);
         }
+
+        //draw coordinate text
+        drawCoords(canvas);
 
     }//onDraw
 
