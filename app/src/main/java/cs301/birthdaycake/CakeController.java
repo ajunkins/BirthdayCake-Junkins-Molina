@@ -1,6 +1,7 @@
 package cs301.birthdaycake;
 
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -42,5 +43,14 @@ public class CakeController implements View.OnClickListener, CompoundButton.OnCh
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        modelReference.x = motionEvent.getX();
+        modelReference.y = motionEvent.getY();
+        viewReference.setCoords(motionEvent.getX(), motionEvent.getY());
+        viewReference.invalidate();
+        return false;
     }
 }

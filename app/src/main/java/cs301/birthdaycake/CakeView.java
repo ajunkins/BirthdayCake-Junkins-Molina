@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceView;
 
 public class CakeView extends SurfaceView {
@@ -37,7 +39,9 @@ public class CakeView extends SurfaceView {
     public static final float wickWidth = 6.0f;
     public static final float outerFlameRadius = 30.0f;
     public static final float innerFlameRadius = 15.0f;
-
+    //initialize x and y touch values
+    float touchedx = 0f;
+    float touchedy = 0f;
 
 
     /**
@@ -72,9 +76,6 @@ public class CakeView extends SurfaceView {
 
         this.reference = new CakeModel();
 
-        //initialize x and y touch values
-        touchedx = 0f;
-        touchedy = 0f;
     }
 
     /**
